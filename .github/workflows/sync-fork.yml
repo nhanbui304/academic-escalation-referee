@@ -2,16 +2,25 @@ name: Sync Fork with Upstream
 
 on:
   schedule:
-    - cron: '*/15 * * * *' # Tự động kiểm tra và sync mỗi 15 phút
-  workflow_dispatch:       # Cho phép bấm nút sync ngay lập tức bất kỳ lúc nào
+    - cron: "*/15 * * * *"   # Tự động đồng bộ mỗi 15 phút
+  workflow_dispatch:         # Cho phép bấm nút "Run workflow" để sync thủ công
 
 jobs:
   sync:
     runs-on: ubuntu-latest
+
     permissions:
       contents: write
+
     steps:
-      - name: Sync with Upstream
+      - name: Checkout fork
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Sync with upstream
         uses: aormsby/Fork-Sync-With-Upstream-action@v3.4.1
         with:
           upstream_sync_repo: HnhanBk415/academic-escalation-referee
